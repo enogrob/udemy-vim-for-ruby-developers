@@ -17,16 +17,16 @@ Learn everything you need to about the subject of this `Udemy` project.
 ```
 0 / 2
 Course Introduction
-[ ] 1. What You'll Learn in This Course 1:31
-[ ] 2. Vim Setting File and Vim Cheat Sheet 0:00
+[x] 1. What You'll Learn in This Course 1:31
+[x] 2. Vim Setting File and Vim Cheat Sheet 0:00
 
 Section: 2
 0 / 4
 Navigation
-[ ] 3. Section Introduction 0:36
-[ ] 4. Basic Commands in Vim 9:48
-[ ] 5. Vim Navigation Shortcuts 4:17
-[ ] 6. Guide to Vim Modes 8:52
+[x] 3. Section Introduction 0:36
+[x] 4. Basic Commands in Vim 9:48
+[x] 5. Vim Navigation Shortcuts 4:17
+[x] 6. Guide to Vim Modes 8:52
 
 Section: 3
 0 / 4
