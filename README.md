@@ -31,10 +31,10 @@ Navigation
 Section: 3
 0 / 4
 Working with Custom Settings in Vim
-[ ] 7. Section Introduction 0:28
-[ ] 8. Customizing Settings for a Single Vim Session 6:31
-[ ] 9. Making Permanent Setting Changes in Vim with the vimrc File 3:01
-[ ] 10. Creating a Base Set of Settings in Vim 9:47
+[x] 7. Section Introduction 0:28
+[x] 8. Customizing Settings for a Single Vim Session 6:31
+[x] 9. Making Permanent Setting Changes in Vim with the vimrc File 3:01
+[x] 10. Creating a Base Set of Settings in Vim 9:47
 
 Section: 4
 0 / 9
