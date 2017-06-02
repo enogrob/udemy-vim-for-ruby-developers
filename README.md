@@ -39,8 +39,8 @@ Working with Custom Settings in Vim
 Section: 4
 0 / 9
 Editing in Vim
-[ ] 11. Section Introduction 0:41
-[ ] 12. Basic Editing Commands in Vim 5:34
+[x] 11. Section Introduction 0:41
+[x] 12. Basic Editing Commands in Vim 5:34
 [ ] 13. Advanced Editing Commands in Vim 9:55
 [ ] 14. Basic Copy, Paste, and Cut Commands in Vim 5:39
 [ ] 15. How to Copy and Paste in Visual Mode 4:34
