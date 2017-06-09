@@ -45,9 +45,9 @@ Editing in Vim
 [x] 14. Basic Copy, Paste, and Cut Commands in Vim 5:39
 [x] 15. How to Copy and Paste in Visual Mode 4:34
 [x] 16. Pasting from the System Clipboard 2:46
-[ ] 17. Introduction to Deleting in Vim 6:53
-[ ] 18. Advanced Delete Commands in Vim 9:25
-[ ] Quiz 1: Vim Editing Quiz 0:00
+[x] 17. Introduction to Deleting in Vim 6:53
+[x] 18. Advanced Delete Commands in Vim 9:25
+[x] Quiz 1: Vim Editing Quiz 0:00
 
 Section: 5
 0 / 5

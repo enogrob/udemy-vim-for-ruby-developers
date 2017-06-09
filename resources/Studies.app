@@ -1,0 +1,1 @@
+/Applications/Studies.app
