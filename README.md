@@ -52,11 +52,11 @@ Editing in Vim
 Section: 5
 0 / 5
 Searching and Selecting
-[ ] 19. Section Introduction 0:21
-[ ] 20. Basic Select Commands in Vim 7:20
-[ ] 21. How to Search Inside of a File 5:27
-[ ] 22. Finding and Replacing Items in Vim 1:35
-[ ] Quiz 2: Searching and Selecting Quiz 0:00
+[x] 19. Section Introduction 0:21
+[x] 20. Basic Select Commands in Vim 7:20
+[x] 21. How to Search Inside of a File 5:27
+[x] 22. Finding and Replacing Items in Vim 1:35
+[x] Quiz 2: Searching and Selecting Quiz 0:00
 
 Section: 6
 0 / 6
