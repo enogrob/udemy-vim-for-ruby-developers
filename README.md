@@ -61,12 +61,12 @@ Searching and Selecting
 Section: 6
 0 / 6
 Advanced Vim Processes for Ruby Developers
-[ ] 23. Section Introduction 0:18
-[ ] 24. Commenting and Uncommenting Ruby Code in Vim 6:06
-[ ] 25. Running a Terminal Session in Vim 4:38
-[ ] 26. Implementing Standard and Smart Indentation Rules in Vim 5:51
-[ ] 27. How to Manually Indent in Vim 2:59
-[ ] Quiz 3: Ruby Shortcuts in Vim Quiz 0:00
+[x] 23. Section Introduction 0:18
+[x] 24. Commenting and Uncommenting Ruby Code in Vim 6:06
+[x] 25. Running a Terminal Session in Vim 4:38
+[x] 26. Implementing Standard and Smart Indentation Rules in Vim 5:51
+[x] 27. How to Manually Indent in Vim 2:59
+[x] Quiz 3: Ruby Shortcuts in Vim Quiz 0:00
 
 Section: 7
 0 / 6
