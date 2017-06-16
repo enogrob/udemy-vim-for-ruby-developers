@@ -71,10 +71,10 @@ Advanced Vim Processes for Ruby Developers
 Section: 7
 0 / 6
 Vim View Management
-[ ] 28. Section Introduction 0:20
-[ ] 29. Showing Multiple View Panes at the Same Time in Vim 6:15
-[ ] 30. Dynamically Resizing Window Pane Sizes 6:59
-[ ] 31. Working with Multiple files in Vim 1:41
+[x] 28. Section Introduction 0:20
+[x] 29. Showing Multiple View Panes at the Same Time in Vim 6:15
+[x] 30. Dynamically Resizing Window Pane Sizes 6:59
+[x] 31. Working with Multiple files in Vim 1:41
 [ ] 32. Working with Background Jobs 3:09
 [ ] Quiz 4: Views in Vim Quiz 0:00
 
