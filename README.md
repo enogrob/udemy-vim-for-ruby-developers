@@ -75,8 +75,8 @@ Vim View Management
 [x] 29. Showing Multiple View Panes at the Same Time in Vim 6:15
 [x] 30. Dynamically Resizing Window Pane Sizes 6:59
 [x] 31. Working with Multiple files in Vim 1:41
-[ ] 32. Working with Background Jobs 3:09
-[ ] Quiz 4: Views in Vim Quiz 0:00
+[x] 32. Working with Background Jobs 3:09
+[x] Quiz 4: Views in Vim Quiz 0:00
 
 Section: 8
 0 / 2
@@ -109,4 +109,20 @@ Bonus Development Tools
 [ ] 45. Running a Case Insensitive Search Query with Grep 1:12
 [ ] 46. Installing and Working with the 'tree' Command from the Terminal 3:56
 [ ] Quiz 6: Tools Quiz 0:00
+```
+
+## vimtutor
+```
+[x] Lesson 1.1: MOVING THE CURSOR
+[x] Lesson 1.2: ENTERING AND EXITING VIM
+[x] Lesson 1.3: TEXT EDITING - DELETION
+[x] Lesson 1.4: TEXT EDITING - INSERTION
+[x] LESSON 1 SUMMARY
+
+[x] Lesson 2.1: DELETION COMMANDS
+[x] Lesson 2.2: MORE DELETION COMMANDS
+[x] Lesson 2.3: ON COMMANDS AND OBJECTS
+[x] Lesson 2.4: AN EXCEPTION TO  'COMMAND-OBJECT'
+[x] Lesson 2.5: THE UNDO COMMAND
+[x] LESSON 2 SUMMARY
 ```
