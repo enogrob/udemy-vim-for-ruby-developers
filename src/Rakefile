@@ -1,0 +1,579 @@
+## Crafted (c) 2014 by Roberto Nogueira
+## File     : Rakefile.rb
+## Version  : PA05
+## Date     : 2014-10-22
+## Reference: ruby-2.1.1@global
+##
+## Problem  : Conference Track Management - A selection test for ThoughtWorks
+
+require 'rake'
+require 'rainbow'
+require 'rainbow/ext/string' if RUBY_VERSION.to_f >= 2.0
+require 'yaml'
+
+CONFS_INPUTDATA_FILE="confs.yaml"
+
+def save_confs_inputdata
+  File.open("#{CONFS_INPUTDATA_FILE}", 'w') do |f|
+    confs_data = {
+        'Conferences' => @confs
+    }
+    YAML.dump(confs_data, f)
+  end
+end
+
+def load_confs_inputdata
+  if !File.exist?("#{CONFS_INPUTDATA_FILE}")
+    puts "-- Error: File #{CONFS_INPUTDATA_FILE} do not exist !".color(:red)
+    puts
+    system %{rake --tasks}
+    puts
+    exit
+  end
+  confs_inputdata = YAML.load(File.open("#{CONFS_INPUTDATA_FILE}"))
+  @confs = confs_inputdata['Conferences']
+end
+
+class TConfsStack
+  attr_accessor :confs, :confs_nr, :total_length, :confs_length_05min, :confs_length_30min, :confs_length_45min, :confs_length_60min
+
+  def initialize
+    @confs = []
+    @confs_nr = 0
+    @total_length = 0
+    @confs_length_05min = 0
+    @confs_length_30min = 0
+    @confs_length_45min = 0
+    @confs_length_60min = 0
+  end
+
+  def confs_by_lenght(length)
+    if length == '05min' then
+      @confs.collect{|conf| conf if (conf =~ /\d+min/) == nil}.compact
+    else
+      @confs.collect{|conf| conf if conf =~ /#{length}/}.compact
+    end
+  end
+
+  def pop(length)
+    if length == '05' then
+      @confs.each do |conf|
+        conf =~ /(\d+)min/
+        if $1.nil? then
+          @confs_length_05min -= 1
+          @total_length -= 5
+          @confs_nr -= 1
+          @confs.delete(conf)
+          return conf
+          break
+        end
+      end
+    else
+      @confs.each do |conf|
+        conf =~ /(\d+)min/
+        if $1 == length then
+          if $1 == '30' then
+            @confs_length_30min -= 1
+            @total_length -= 30
+            @confs_nr -= 1
+            @confs.delete(conf)
+            return conf
+            break
+          elsif $1 == '45' then
+            @confs_length_45min -= 1
+            @total_length -= 45
+            @confs_nr -= 1
+            @confs.delete(conf)
+            return conf
+            break
+          elsif $1 == '60'  then
+            @confs_length_60min -= 1
+            @total_length -= 60
+            @confs_nr -= 1
+            @confs.delete(conf)
+            return conf
+            break
+          end
+        end
+      end
+    end
+  end
+
+  def push(conf)
+    @confs << conf
+    conf =~ /(\d+)min/
+    if $1.nil? then
+      @confs_length_05min += 1
+      @total_length += 5
+      @confs_nr += 1
+    elsif $1 == '30' then
+      @confs_length_30min += 1
+      @total_length += 30
+      @confs_nr += 1
+    elsif $1 == '45' then
+      @confs_length_45min += 1
+      @total_length += 45
+      @confs_nr += 1
+    elsif $1 == '60' then
+      @confs_length_60min += 1
+      @total_length += 60
+      @confs_nr += 1
+    end
+  end
+
+end
+
+class TTrackStack < TConfsStack
+
+  def pop(conf)
+    l = length(conf).to_s
+    l = '0' + l if l == '5'
+    if l == '05' then
+      @confs_length_05min -= 1
+      @total_length -= 5
+      @confs_nr -= 1
+    elsif l == '30' then
+      @confs_length_30min -= 1
+      @total_length -= 30
+      @confs_nr -= 1
+    elsif l == '45' then
+      @confs_length_45min -= 1
+      @total_length -= 45
+      @confs_nr -= 1
+    elsif l == '60'  then
+      @confs_length_60min -= 1
+      @total_length -= 60
+      @confs_nr -= 1
+    end
+  end
+
+  def length(conf)
+    conf =~ /(\d+)min/
+    if $1.nil? then
+       5
+    elsif $1 == '30' then
+      30
+    elsif $1 == '45' then
+      45
+    elsif $1 == '60' then
+      60
+    end
+  end
+
+  def print
+    time = TTime.new('09:00AM')
+    @confs.each do |conf|
+      puts "#{time} #{conf}"
+      self.pop(conf)
+      if length(conf) == 5 and @confs_length_05min == 0  then
+        time.hour = time.hour + 1
+        time.min = 0
+      else
+        time.add(length(conf))
+      end
+      if time == '12:00AM' then
+        puts "#{time} lunch"
+        time.is_now('01:00PM')
+      end
+      if time == '05:00PM' then
+        puts "#{time} Network Event"
+      end
+    end
+  end
+end
+
+class TTime < String
+  def hour
+    self =~ /(\d+)\:(\d+)(\w+)/
+    $1.to_i
+  end
+
+  def hour=(a_hour)
+    self =~ /(\d+)\:(\d+)(\w+)/
+    h = "0" + a_hour.to_s if a_hour < 10
+    h = a_hour.to_s if a_hour > 9
+    self.replace("#{h}:#{$2}#{$3}")
+  end
+
+  def min
+    self =~ /(\d+)\:(\d+)(\w+)/
+    $2.to_i
+  end
+
+  def min=(a_min)
+    m = "0" + a_min.to_s if a_min < 10
+    m = a_min.to_s if a_min > 9
+    self =~ /(\d+)\:(\d+)(\w+)/
+    self.replace("#{$1}:#{m}#{$3}")
+  end
+
+  def ampm
+    self =~ /(\d+)\:(\d+)(\w+)/
+    $3
+  end
+
+  def ampm=(a_ampm)
+    self =~ /(\d+)\:(\d+)(\w+)/
+    self.replace("#{$1}:#{$2}#{a_ampm}")
+  end
+
+  def add(a_min)
+    a_min = self.min + a_min
+    if a_min >= 60 then
+      self.min = a_min - 60
+      if self.ampm == 'AM' then
+        if self.hour == 12 then
+          self.hour = 1
+          self.ampm = 'PM'
+        else
+          self.hour += 1
+        end
+      else
+        if self.hour == 11 then
+          self.hour = 0
+          self.ampm = 'AM'
+        else
+          self.hour += 1
+        end
+      end
+    else
+      self.min = a_min
+    end
+    self
+  end
+
+  def is_now(a_time)
+    a_time =~ /(\d+)\:(\d+)(\w+)/
+    self.replace("#{$1}:#{$2}#{$3}")
+  end
+
+  def to_TTime
+    hour = self.hour
+    if a_hour < 10 then
+      a_hour = "0" + a_hour.to_s
+    else
+      a_hour = a_hour.to_s
+    end
+    a_min = self.min
+    if a_min < 10 then
+      a_min = "0" + a_min.to_s
+    else
+      a_min = a_min.to_s
+    end
+    a_ampm = self.ampm
+    "#{a_hour}:#{a_min}#{a_ampm}"
+  end
+
+end
+
+task :default => ["confs:tasks"]
+
+namespace :confs do
+
+  desc "Conferences tasks - DEFAULT"
+  task :tasks do
+    puts "Crafted (C) 2014 by Roberto Nogueira".color(:cyan)
+    puts "Conferences Track Manager - 2014-10-22 PA05".color(:cyan)
+    puts
+    system %{rake --tasks}
+    puts
+  end
+
+  desc "Conferences statistics"
+  task :stats do
+    puts "=> confs::stats: statistics to generate Conference tracks...".bright
+    puts
+    load_confs_inputdata
+    confs_stats
+  end
+
+  desc "Conferences tracks"
+  task :tracks do
+    puts "=> confs::tracks: generate Conference tracks...".bright
+    puts
+    load_confs_inputdata
+    if @confs.confs_length_05min > 0 then
+      total_length = @confs.total_length - @confs.confs_length_05min * 5 + 60
+    else
+      total_length = @confs.total_length
+    end
+    tracks = total_length/420
+    print "TRACKS ALLOWED: ".color(:cyan); puts "#{tracks} tracks"
+    puts
+
+    @lengths_05min = []
+    @lengths_30min = []
+    @lengths_45min = []
+    @lengths_60min = []
+    (1..@confs.confs_length_05min).each {@lengths_05min << '05'}
+    (1..@confs.confs_length_30min).each {@lengths_30min << '30'}
+    (1..@confs.confs_length_45min).each {@lengths_45min << '45'}
+    (1..@confs.confs_length_60min).each {@lengths_60min << '60'}
+
+    @lengths_120min = []
+    if @confs.confs_length_45min != 0 then
+      if @confs.confs_length_45min % 2 == 0 then
+         if @confs.confs_length_30min >= @confs.confs_length_45min / 2 then
+           (1..@confs.confs_length_45min / 2).each do
+             @lengths_120min << '45'
+             @lengths_120min << '45'
+             @lengths_120min << '30'
+             @lengths_45min.delete_at(@lengths_45min.index('45'))
+             @lengths_45min.delete_at(@lengths_45min.index('45'))
+             @lengths_30min.delete_at(@lengths_30min.index('30'))
+           end
+         else
+           puts "-- Error: it is required at least #{@confs.confs_length_45min / 2} 30min conferences.".color(:red)
+           puts
+           exit
+         end
+      else
+        if @lengths_30min.size = 1 then
+          if @lengths_05min.size > 0 then
+          else
+            puts "-- Error: it is remaining 30min conference.".color(:red)
+            puts
+            exit
+          end
+        else
+          if @lengths_05min.size > 0 then
+          else
+            puts "-- Error: it is remaining 60min conference.".color(:red)
+            puts
+            exit
+          end
+        end
+      end
+    end
+
+    (1..tracks).each do |t|
+      track = TTrackStack.new
+
+      @track_confs = []
+      conf_analysis_60min
+      @track_confs.each do |d|
+        track.push(@confs.pop(d))
+      end
+      @track_confs = []
+      conf_analysis_120min
+      @track_confs.each do |d|
+        track.push(@confs.pop(d))
+      end
+
+      @track_confs = []
+      conf_analysis_120min
+      @track_confs.each do |d|
+        track.push(@confs.pop(d))
+      end
+      @track_confs = []
+      conf_analysis_120min
+      @track_confs.each do |d|
+        track.push(@confs.pop(d))
+      end
+
+      puts "TRACK: #{t}".color(:cyan)
+      track.print
+      puts
+    end
+    confs_stats
+  end
+
+  def confs_stats
+    print "CONFS NR      : ".color(:cyan); puts "#{@confs.confs_nr}"
+    print "LENGHT 05 MIN : ".color(:cyan); puts "#{@confs.confs_length_05min}"
+    print "LENGHT 30 MIN : ".color(:cyan); puts "#{@confs.confs_length_30min}"
+    print "LENGHT 45 MIN : ".color(:cyan); puts "#{@confs.confs_length_45min}"
+    print "LENGHT 60 MIN : ".color(:cyan); puts "#{@confs.confs_length_60min}"
+    puts
+    print "TOTAL LENGHT  : ".color(:cyan); puts "#{@confs.total_length} min"
+    if @confs.confs_length_05min > 0 then
+      total_length = @confs.total_length - @confs.confs_length_05min * 5 + 60
+    else
+      total_length = @confs.total_length
+    end
+    print "TRACKS ALLOWED: ".color(:cyan); puts "#{total_length/420} tracks"
+    puts
+  end
+
+  def conf_analysis_120min
+    if @lengths_120min.size >= 3 then
+      @track_confs += @lengths_120min.pop(3)
+    else
+      if @lengths_60min.size >= 2 then
+        @track_confs += @lengths_60min.pop(2)
+      else
+        if @lengths_60min.size == 1 then
+          @track_confs += @lengths_60min.pop(1)
+          conf_analysis_60min
+        else
+          conf_analysis_60min
+          conf_analysis_60min
+        end
+      end
+    end
+  end
+
+  def conf_analysis_60min
+    if @lengths_60min.size > 0 then
+      @track_confs += @lengths_60min.pop(1)
+    else
+      if @lengths_30min.size >= 2 then
+        @track_confs += @lengths_30min.pop(2)
+      else
+        if @lengths_30min.size == 1 then
+          @track_confs += @lengths_30min.pop(1)
+          if @lengths_05min.size > 0 then
+            @track_confs += @lengths_05min.pop(@lengths_05min.size)
+          else
+            puts "-- Error: it is remaining 30min conference.".color(:red)
+            puts
+            exit
+          end
+        else
+          if @lengths_05min.size > 0 then
+            @track_confs += @lengths_05min.pop(@lengths_05min.size)
+          else
+            puts "-- Error: it is remaining 60min conference.".color(:red)
+            puts
+            exit
+          end
+        end
+      end
+    end
+  end
+
+  desc "Initializes the conferences input datafile"
+  task :init, [:a_with_example_yes_or_no] do |t, args|
+    puts "=> confs::init: creating a input datafile...".bright
+    puts
+    args.with_defaults(:a_with_example_yes_or_no => "yes")
+    conf = args.a_with_example_yes_or_no
+    @confs = TConfsStack.new
+
+    if conf == 'yes' then
+      @confs.push("Writing Fast Tests Against Enterprise Rails 60min")
+      @confs.push("Overdoing it in Python 45min")
+      @confs.push("Lua for the Masses 30min")
+      @confs.push("Ruby Errors from Mismatched Gem Versions 45min")
+      @confs.push("Common Ruby Errors 45min")
+      @confs.push("Rails for Python Developers lightning")
+      @confs.push("Communicating Over Distance 60min")
+      @confs.push("Accounting-Driven Development 45min")
+      @confs.push("Woah 30min")
+      @confs.push("Sit Down and Write 30min")
+      @confs.push("Pair Programming vs Noise 45min")
+      @confs.push("Rails Magic 60min")
+      @confs.push("Ruby on Rails: Why We Should Move On 60min")
+      @confs.push("Clojure Ate Scala (on my project) 45min")
+      @confs.push("Programming in the Boondocks of Seattle 30min")
+      @confs.push("Ruby vs. Clojure for Back-End Development 30min")
+      @confs.push("Ruby on Rails Legacy App Maintenance 60min")
+      @confs.push("A World Without HackerNews 30min")
+      @confs.push("User Interface CSS in Rails Apps 30min")
+    end
+    save_confs_inputdata
+    puts "-- Conferences inputdata file created:".color(:yellow)
+    system %{ls -la "#{CONFS_INPUTDATA_FILE}"}
+    puts
+  end
+
+  desc "Add conference in inputdata file"
+  task :add, [:a_conf] do |t, args|
+    puts "=> confs_insert: inserting a conference in input datafile...".bright
+    puts
+    args.with_defaults(:a_conf => "confname")
+    conf = args.a_conf
+    if conf == "confname" then
+      puts "-- Error: confname is required.".color(:red)
+      puts
+      exit
+    end
+    if conf =~ /^\w\s*/ then
+      conf =~ /(\d+)min/
+      if $1.nil? || $1 == '30' || $1 == '45' || $1 == '60' then
+        load_confs_inputdata
+        @confs.push(conf)
+        save_confs_inputdata
+        puts "-- Conferences inputdata file updated:".color(:yellow)
+        system %{ls -la "#{CONFS_INPUTDATA_FILE}"}
+        puts
+      else
+        puts "-- Error: Length #{$1} is not permited !".color(:red)
+        puts
+      end
+    else
+      puts "-- Error: Conference foarmat is not permited !".color(:red)
+      puts
+    end
+  end
+
+  desc "Print conferences inputdata file"
+  task :print do
+    load_confs_inputdata
+    puts "=> confs::print: printing conferences inputdata file...".bright
+    puts
+    puts "CONFERENCES: ".color(:cyan)
+    @confs.confs.each do |conf|
+      puts ('--' + conf).color(:green)
+    end
+  end
+
+  desc "Print conferences inputdata file by length"
+  task :print_bylength, [:a_length] do |t, args|
+    puts "=> confs::print: printing conferences inputdata file by length...".bright
+    puts
+    args.with_defaults(:a_length => "all")
+    a_length = args.a_length
+    load_confs_inputdata
+    if a_length == 'all' then
+      puts "CONFERENCES: ".color(:cyan)
+      puts "LENGTH: 05min".color(:yellow)
+      @confs.confs_by_lenght('05min').each do |conf|
+        puts ('--' + conf).color(:green)
+      end
+      puts "LENGTH: 30min".color(:yellow)
+      @confs.confs_by_lenght('30min').each do |conf|
+        puts ('--' + conf).color(:green)
+      end
+      puts "LENGTH: 45min".color(:yellow)
+      @confs.confs_by_lenght('45min').each do |conf|
+        puts ('--' + conf).color(:green)
+      end
+      puts "LENGTH: 60min".color(:yellow)
+      @confs.confs_by_lenght('60min').each do |conf|
+        puts ('--' + conf).color(:green)
+      end
+    elsif a_length == '05min' then
+      puts "CONFERENCES: ".color(:cyan)
+      puts "LENGTH: #{a_length}".color(:yellow)
+      @confs.confs_by_lenght('05min').each do |conf|
+        puts ('--' + conf).color(:green)
+      end
+    elsif a_length == '30min' then
+      puts "CONFERENCES: ".color(:cyan)
+      puts "LENGTH: #{a_length}".color(:yellow)
+      @confs.confs_by_lenght('30min').each do |conf|
+        puts ('--' + conf).color(:green)
+      end
+    elsif a_length == '45min' then
+      puts "CONFERENCES: ".color(:cyan)
+      puts "LENGTH: #{a_length}".color(:yellow)
+      @confs.confs_by_lenght('45min').each do |conf|
+        puts ('--' + conf).color(:green)
+      end
+    elsif a_length == '60min' then
+      puts "CONFERENCES: ".color(:cyan)
+      puts "LENGTH: #{a_length}".color(:yellow)
+      @confs.confs_by_lenght('60min').each do |conf|
+        puts ('--' + conf).color(:green)
+      end
+    else
+      puts "-- Error: Length #{a_length} do not exist !".color(:red)
+      puts
+      exit
+    end
+  end
+
+end
+
+

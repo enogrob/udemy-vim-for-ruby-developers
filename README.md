@@ -81,8 +81,8 @@ Vim View Management
 Section: 8
 0 / 2
 Auto Processing Ruby Code
-[ ] 33. Section Introduction 0:34
-[ ] 34. How to Auto Render Ruby Code in Vim 7:15
+[x] 33. Section Introduction 0:34
+[x] 34. How to Auto Render Ruby Code in Vim 7:15
 
 Section: 9
 0 / 6
