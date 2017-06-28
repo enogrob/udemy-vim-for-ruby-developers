@@ -87,9 +87,9 @@ Auto Processing Ruby Code
 Section: 9
 0 / 6
 Guide to Vim Plugins
-[ ] 35. Section Introduction 1:01
-[ ] 36. Implementing File Fuzzy Search in Vim with CtrlP Plugin 6:34
-[ ] 37. Integrating NERDTree for Adding a File System Pane to Vim 7:52
+[x] 35. Section Introduction 1:01
+[x] 36. Implementing File Fuzzy Search in Vim with CtrlP Plugin 6:34
+[x] 37. Integrating NERDTree for Adding a File System Pane to Vim 7:52
 [ ] 38. Implementing the Endwise Plugin for Smart Auto Complete Behavior in Vim 4:12
 [ ] 39. Integrate the Supertab Plugin for Efficient Tab Completion in Vim 5:19
 [ ] 40. Installing the Pathogen Plugin Manager 3:56
