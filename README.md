@@ -91,8 +91,8 @@ Guide to Vim Plugins
 [x] 36. Implementing File Fuzzy Search in Vim with CtrlP Plugin 6:34
 [x] 37. Integrating NERDTree for Adding a File System Pane to Vim 7:52
 [x] 38. Implementing the Endwise Plugin for Smart Auto Complete Behavior in Vim 4:12
-[ ] 39. Integrate the Supertab Plugin for Efficient Tab Completion in Vim 5:19
-[ ] 40. Installing the Pathogen Plugin Manager 3:56
+[x] 39. Integrate the Supertab Plugin for Efficient Tab Completion in Vim 5:19
+[x] 40. Installing the Pathogen Plugin Manager 3:56
 
 Section: 10
 0 / 3
